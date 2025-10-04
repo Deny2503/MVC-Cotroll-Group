@@ -24,7 +24,7 @@ namespace MVC_Cotroll_Group.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            _logger = logger;
         }
 
 

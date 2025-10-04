@@ -1,5 +1,43 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<MVC_Cotroll_Group.Models.Category>
 @{
+    ViewData["Title"] = "Категорії";
 }
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+
+<div class="max-w-4xl mx-auto mt-10">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Категорії</h1>
+        <a href="@Url.Action("Create", "Category")"
+           class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            Додати категорію
+        </a>
+    </div>
+
+    <table class="w-full border-collapse shadow-lg">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="text-left p-3 border-b">ID</th>
+                <th class="text-left p-3 border-b">Назва</th>
+                <th class="text-left p-3 border-b">Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="p-3 border-b">@c.Id</td>
+                    <td class="p-3 border-b text-blue-600 hover:underline">
+                        <a href="@Url.Action("Index", "Products", new { categoryId = c.Id })">@c.Name</a>
+                    </td>
+                    <td class="p-3 border-b">
+                        <a href="@Url.Action("Edit", "Category", new { id = c.Id })"
+                           class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition">Редагувати</a>
+                        <a href="@Url.Action("Delete", "Category", new { id = c.Id })"
+                           class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition">Видалити</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
