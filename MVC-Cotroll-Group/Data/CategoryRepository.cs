@@ -1,7 +1,31 @@
-﻿namespace MVC_Cotroll_Group.Data
+﻿using Microsoft.EntityFrameworkCore;
+using MVC_Cotroll_Group.Data;
+using MVC_Cotroll_Group.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace MVC_Cotroll_Group.Repositories
 {
-    internal class CategoryRepository
+    public class CategoryRepository : Repository<Category>
     {
-        private AppDbContext _context;
+        private readonly AppDbContext _context;
+
+        public CategoryRepository(AppDbContext context) : base(context)
+        {
+            _context = context;
+        }
+        public async Task<IEnumerable<Category>> GetAllWithProductsAsync()
+        {
+            return await _context.Categories
+                .Include(c => c.Products)
+                .ToListAsync();
+        }
+
+        public async Task<Category?> GetByIdWithProductsAsync(int id)
+        {
+            return await _context.Categories
+                .Include(c => c.Products)
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
     }
 }
