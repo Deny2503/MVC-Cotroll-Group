@@ -20,11 +20,10 @@ namespace MVC_Cotroll_Group.Controllers
             return View(categories);
         }
 
-
         [HttpGet]
         public IActionResult Create()
         {
-            _logger = logger;
+            return View();
         }
 
 

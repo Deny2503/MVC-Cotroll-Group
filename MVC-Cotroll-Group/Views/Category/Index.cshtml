@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Категорії";
 }
-<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
 
 <div class="max-w-4xl mx-auto mt-10">
@@ -28,7 +27,7 @@
                 <tr class="hover:bg-gray-50 transition">
                     <td class="p-3 border-b">@c.Id</td>
                     <td class="p-3 border-b text-blue-600 hover:underline">
-                        <a href="@Url.Action("Index", "Products", new { categoryId = c.Id })">@c.Name</a>
+                        <a href="@Url.Action("Index", "Product", new { categoryId = c.Id })">@c.Name</a>
                     </td>
                     <td class="p-3 border-b">
                         <a href="@Url.Action("Edit", "Category", new { id = c.Id })"
