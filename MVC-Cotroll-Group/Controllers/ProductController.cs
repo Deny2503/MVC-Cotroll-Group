@@ -4,11 +4,11 @@ using MVC_Cotroll_Group.Models;
 
 namespace MVC_Cotroll_Group.Controllers
 {
-    public class HomeController : Controller
+    public class ProductController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<ProductController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public ProductController(ILogger<ProductController> logger)
         {
             _logger = logger;
         }
@@ -18,15 +18,5 @@ namespace MVC_Cotroll_Group.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }
