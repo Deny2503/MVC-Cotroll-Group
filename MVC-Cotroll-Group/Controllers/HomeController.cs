@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MVC_Cotroll_Group.Models;
+using MVC_Cotroll_Group.Repositories;
 
 namespace MVC_Cotroll_Group.Controllers
 {

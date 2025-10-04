@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using MVC_Cotroll_Group.Models;
+using MVC_Cotroll_Group.Repositories;
 
 
 namespace MVC_Cotroll_Group.Controllers
@@ -8,16 +8,15 @@ namespace MVC_Cotroll_Group.Controllers
     public class CategoryController : Controller
     {
         
-        private readonly ApplicationDbContext _context;
-        public CategoryController(ApplicationDbContext context)
+        private readonly CategoryRepository _categoryRepository;
+
+        public CategoryController(CategoryRepository categoryRepository)
         {
-            _context = context;
+            _categoryRepository = categoryRepository;
         }
         public IActionResult Index()
         {
-            var categories = _context.Categories
-                .Include(c => c.Products)
-                .ToList();
+            IEnumerable<Category> categories = _categoryRepository.GetAllWithProductsAsync().Result;
             return View(categories);
         }
 
@@ -35,8 +34,8 @@ namespace MVC_Cotroll_Group.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Categories.Add(category);
-                _context.SaveChanges();
+                _categoryRepository.AddAsync(category).Wait();
+                _categoryRepository.SaveChangesAsync().Wait();
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -46,7 +45,7 @@ namespace MVC_Cotroll_Group.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var category = _context.Categories.Find(id);
+            Category? category = _categoryRepository.GetByIdAsync(id).Result;
             if (category == null)
             {
                 return NotFound();
@@ -65,8 +64,8 @@ namespace MVC_Cotroll_Group.Controllers
             }
             if (ModelState.IsValid)
             {
-                _context.Update(category);
-                _context.SaveChanges();
+                _categoryRepository.UpdateAsync(category).Wait();
+                _categoryRepository.SaveChangesAsync().Wait();
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -75,9 +74,7 @@ namespace MVC_Cotroll_Group.Controllers
 
         public IActionResult Delete(int id)
         {
-            var category = _context.Categories
-                .Include(c => c.Products)
-                .FirstOrDefault(c => c.Id == id);
+            Category category = _categoryRepository.GetByIdWithProductsAsync(id).Result;
 
             if (category == null)
                 return NotFound();
@@ -90,22 +87,21 @@ namespace MVC_Cotroll_Group.Controllers
 
             return View(category);
         }
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var category = _context.Categories.Find(id);
+            var category = _categoryRepository.GetByIdAsync(id).Result;
             if (category == null)
                 return NotFound();
-            _context.Categories.Remove(category);
-            _context.SaveChanges();
+            _categoryRepository.DeleteAsync(id).Wait();
+            _categoryRepository.SaveChangesAsync().Wait();
             return RedirectToAction(nameof(Index));
         }
         public IActionResult Details(int id)
         {
-            var category = _context.Categories
-                .Include(c => c.Products)
-                .FirstOrDefault(c => c.Id == id);
+            Category? category = _categoryRepository.GetByIdWithProductsAsync(id).Result;
             if (category == null)
                 return NotFound();
             return View(category);
