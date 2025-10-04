@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 namespace MVC_Cotroll_Group.Models
 {
     public class Category
     {
-
+        [Key]
         public int Id { get; set; }
-        [Required(ErrorMessage = "ім`я обов`язкове")]
-        [MaxLength(100, ErrorMessage = "Максимальна довжина 100 символів")]
+
+        [StringLength(50)]
+        [Required]
         public string Name { get; set; }
-        public ICollection<Product> Products { get; set; }
+
+        public List<Product> Products { get; set; }
     }
 }
