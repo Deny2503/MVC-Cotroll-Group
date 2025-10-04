@@ -1,28 +1,110 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+Ôªøusing Microsoft.AspNetCore.Mvc;
 using MVC_Cotroll_Group.Models;
+using MVC_Cotroll_Group.Repositories;
+
 
 namespace MVC_Cotroll_Group.Controllers
 {
     public class CategoryController : Controller
     {
-        private static List<Category> _categories = new()
+        
+        private readonly CategoryRepository _categoryRepository;
+
+        public CategoryController(CategoryRepository categoryRepository)
         {
-            new Category { Id = 1, Name = "ÕÓÛÚ·ÛÍË" },
-            new Category { Id = 2, Name = "—Ï‡ÚÙÓÌË" },
-            new Category { Id = 3, Name = "œÂËÙÂ≥ˇ" }
-        };
+            _categoryRepository = categoryRepository;
+        }
+        public IActionResult Index()
+        {
+            IEnumerable<Category> categories = _categoryRepository.GetAllWithProductsAsync().Result;
+            return View(categories);
+        }
 
-        private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ILogger<CategoryController> logger)
+        [HttpGet]
+        public IActionResult Create()
         {
             _logger = logger;
         }
 
-        public IActionResult Index()
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Category category)
         {
-            return View( _categories);
+            if (ModelState.IsValid)
+            {
+                _categoryRepository.AddAsync(category).Wait();
+                _categoryRepository.SaveChangesAsync().Wait();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(category);
+        }
+
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            Category? category = _categoryRepository.GetByIdAsync(id).Result;
+            if (category == null)
+            {
+                return NotFound();
+            }
+            return View(category);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Category category)
+        {
+            if (id != category.Id)
+            {
+                return BadRequest();
+            }
+            if (ModelState.IsValid)
+            {
+                _categoryRepository.UpdateAsync(category).Wait();
+                _categoryRepository.SaveChangesAsync().Wait();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(category);
+        }
+
+
+        public IActionResult Delete(int id)
+        {
+            Category category = _categoryRepository.GetByIdWithProductsAsync(id).Result;
+
+            if (category == null)
+                return NotFound();
+
+            if (category.Products.Any())
+            {
+                TempData["Error"] = "–ù–µ–º–æ–∂–ª–∏–≤–æ –≤–∏–¥–∞–ª–∏—Ç–∏ –∫–∞—Ç–µ–≥–æ—Ä—ñ—é , –±–æ –≤–æ–Ω–∞ –º—ñ—Å—Ç–∏—Ç—å –ø—Ä–æ–¥—É–∫—Ç–∏.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(category);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var category = _categoryRepository.GetByIdAsync(id).Result;
+            if (category == null)
+                return NotFound();
+            _categoryRepository.DeleteAsync(id).Wait();
+            _categoryRepository.SaveChangesAsync().Wait();
+            return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Details(int id)
+        {
+            Category? category = _categoryRepository.GetByIdWithProductsAsync(id).Result;
+            if (category == null)
+                return NotFound();
+            return View(category);
         }
     }
 }
