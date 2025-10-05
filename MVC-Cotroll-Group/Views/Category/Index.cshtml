@@ -3,40 +3,60 @@
     ViewData["Title"] = "Категорії";
 }
 
+<div class="max-w-6xl mx-auto mt-10 px-4">
+    @if (TempData["Error"] != null)
+    {
+        <div class="bg-red-50 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 shadow-sm">
+            <strong class="font-semibold">Помилка:</strong> @TempData["Error"]
+        </div>
+    }
 
-<div class="max-w-4xl mx-auto mt-10">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Категорії</h1>
-        <a href="@Url.Action("Create", "Category")"
-           class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">Категорії</h1>
+        <a asp-action="Create"
+           class="inline-flex items-center gap-2 bg-blue-600 text-white font-medium px-4 py-2 rounded-xl shadow hover:bg-blue-700 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
             Додати категорію
         </a>
     </div>
 
-    <table class="w-full border-collapse shadow-lg">
-        <thead class="bg-gray-100">
-            <tr>
-                <th class="text-left p-3 border-b">ID</th>
-                <th class="text-left p-3 border-b">Назва</th>
-                <th class="text-left p-3 border-b">Дії</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var c in Model)
-            {
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="p-3 border-b">@c.Id</td>
-                    <td class="p-3 border-b text-blue-600 hover:underline">
-                        <a href="@Url.Action("Index", "Product", new { categoryId = c.Id })">@c.Name</a>
-                    </td>
-                    <td class="p-3 border-b">
-                        <a href="@Url.Action("Edit", "Category", new { id = c.Id })"
-                           class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition">Редагувати</a>
-                        <a href="@Url.Action("Delete", "Category", new { id = c.Id })"
-                           class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition">Видалити</a>
-                    </td>
+    <div class="overflow-x-auto bg-white shadow-lg rounded-2xl">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-100 border-b text-gray-600 text-sm uppercase tracking-wide">
+                <tr>
+                    <th class="p-4">ID</th>
+                    <th class="p-4">Назва</th>
+                    <th class="p-4">Кількість продуктів</th>
+                    <th class="p-4 text-right">Дії</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody class="text-gray-800">
+                @foreach (var c in Model)
+                {
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="p-4">@c.Id</td>
+                        <td class="p-4 font-medium text-blue-600 hover:underline">
+                            <a asp-controller="Products" asp-action="Index" asp-route-categoryId="@c.Id">@c.Name</a>
+                        </td>
+                        <td class="p-4">@((c.Products != null) ? c.Products.Count() : 0)</td>
+                        <td class="p-4 text-right space-x-2">
+                            <a asp-action="Edit" asp-route-id="@c.Id"
+                               class="inline-flex items-center gap-1 bg-yellow-400 text-white px-3 py-1.5 rounded-lg hover:bg-yellow-500 transition shadow-sm">
+                                ✏️ <span>Редагувати</span>
+                            </a>
+                            @if (c.Products == null || !c.Products.Any())
+                            {
+                                <a asp-action="Delete" asp-route-id="@c.Id"
+                                   class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 transition shadow-sm">
+                                    🗑 <span>Видалити</span>
+                                </a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
