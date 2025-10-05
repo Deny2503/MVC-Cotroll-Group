@@ -14,7 +14,7 @@
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-extrabold text-gray-800 tracking-tight">Категорії</h1>
         <a asp-action="Create"
-           class="inline-flex items-center gap-2 bg-blue-600 text-white font-medium px-4 py-2 rounded-xl shadow hover:bg-blue-700 transition">
+           class="inline-flex items-center gap-2 bg-blue-600 text-white font-medium px-4 py-2 rounded-xl shadow hover:bg-blue-700 transition text-decoration-none">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
@@ -37,19 +37,17 @@
                 {
                     <tr class="hover:bg-gray-50 transition">
                         <td class="p-4">@c.Id</td>
-                        <td class="p-4 font-medium text-blue-600 hover:underline">
-                            <a asp-controller="Products" asp-action="Index" asp-route-categoryId="@c.Id">@c.Name</a>
-                        </td>
+                        <td class="p-4"> @c.Name</td>
                         <td class="p-4">@((c.Products != null) ? c.Products.Count() : 0)</td>
                         <td class="p-4 text-right space-x-2">
                             <a asp-action="Edit" asp-route-id="@c.Id"
-                               class="inline-flex items-center gap-1 bg-yellow-400 text-white px-3 py-1.5 rounded-lg hover:bg-yellow-500 transition shadow-sm">
+                               class="inline-flex items-center gap-1 bg-yellow-400 text-white px-3 py-1.5 rounded-lg hover:bg-yellow-500 transition shadow-sm text-decoration-none">
                                 ✏️ <span>Редагувати</span>
                             </a>
                             @if (c.Products == null || !c.Products.Any())
                             {
                                 <a asp-action="Delete" asp-route-id="@c.Id"
-                                   class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 transition shadow-sm">
+                                   class="inline-flex items-center gap-1 bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 transition shadow-sm text-decoration-none">
                                     🗑 <span>Видалити</span>
                                 </a>
                             }
