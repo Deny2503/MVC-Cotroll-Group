@@ -5,18 +5,19 @@
     var categoryName = ViewBag.CategoryName ?? "Unknown Category";
 }
 
-<div class="max-w-5xl mx-auto mt-10">
+<div class="max-w-5xl mx-auto mt-10 space-y-6">
+
     <div class="flex justify-between items-center mb-6">
         @if (ViewData["SeacrchCategory"] != null)
         {
-            <h1 class="text-3xl font-bold">
+            <h2 class="text-2xl font-semibold">
                 Products in category: <span class="text-blue-600">@ViewData["SeacrchCategory"]</span>
-            </h1>
+            </h2>
         }
 
         <a href="@Url.Action("Create", "Product")"
-           class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-           Add Product
+           class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-decoration-none">
+            Add Product
         </a>
     </div>
 
@@ -36,15 +37,15 @@
                 {
                     <tr class="hover:bg-gray-50 transition">
                         <td class="p-3 border-b text-blue-600 hover:underline">
-                            <a href="@Url.Action("Details", "Product", new { id = product.Id })">@product.Name</a>
+                            <a href="@Url.Action("Details", "Product", new { id = product.Id })" class="text-decoration-none">@product.Name</a>
                         </td>
                         <td class="p-3 border-b font-semibold">$@product.Price</td>
                         <td class="p-3 border-b text-yellow-500">⭐ @product.Rating / 5</td>
                         <td class="p-3 border-b text-center space-x-2">
-                            <a href="@Url.Action("Edit", "Product", new { id = product.Id })" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition">
+                            <a href="@Url.Action("Edit", "Product", new { id = product.Id })" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition text-decoration-none">
                                 Edit
                             </a>
-                            <a href="@Url.Action("Delete", "Product", new { id = product.Id })" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition">
+                            <a href="@Url.Action("Delete", "Product", new { id = product.Id })" class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 transition text-decoration-none">
                                 Delete
                             </a>
                         </td>

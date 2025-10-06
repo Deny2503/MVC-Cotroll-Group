@@ -16,7 +16,7 @@ namespace MVC_Cotroll_Group.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<IActionResult> Index(string? category, string? sortOrder)
+        public async Task<IActionResult> Index(string? category, string? sortOrder, int? rating, string? name)
         {
             var products = await _productRepository.GetAllWithCategoryAsync();
             if (!string.IsNullOrEmpty(category))
@@ -30,16 +30,41 @@ namespace MVC_Cotroll_Group.Controllers
                 
             }
 
-            products = sortOrder switch
+            if (!string.IsNullOrEmpty(sortOrder))
             {
-                "price_asc" => products.OrderBy(p => p.Price),
-                "price_desc" => products.OrderByDescending(p => p.Price),
-                "rating_asc" => products.OrderBy(p => p.Rating),
-                "rating_desc" => products.OrderByDescending(p => p.Rating),
-                "name_asc" => products.OrderBy(p => p.Name),
-                "name_desc" => products.OrderByDescending(p => p.Name),
-                _ => products.OrderBy(p => p.Id)
-            };
+                ViewData["Order"] = sortOrder switch
+                {
+                    "price_asc" => "Price ↑ (Lowest First)",
+                    "price_desc" => "Price ↓ (Highest First)",
+                    "rating_asc" => "Rating ↑ (Lowest First)",
+                    "rating_desc" => "Rating ↓ (Highest First)",
+                    "name_asc" => "Name A → Z",
+                    "name_desc" => "Name Z → A",
+                    _ => "Default Order"
+                };
+                
+                products = sortOrder switch
+                {
+                    "price_asc" => products.OrderBy(p => p.Price),
+                    "price_desc" => products.OrderByDescending(p => p.Price),
+                    "rating_asc" => products.OrderBy(p => p.Rating),
+                    "rating_desc" => products.OrderByDescending(p => p.Rating),
+                    "name_asc" => products.OrderBy(p => p.Name),
+                    "name_desc" => products.OrderByDescending(p => p.Name),
+                    _ => products.OrderBy(p => p.Id)
+                };
+            }
+            else
+            {
+                ViewData["Order"] = "Default Order";
+            }
+
+            if (rating.HasValue && rating.Value >= 1 && rating.Value <= 5)
+            {
+                products = products.Where(p => p.Rating >= rating.Value);
+                ViewData["SearchRating"] = rating.Value;
+            }
+
 
             return View(products);
         }

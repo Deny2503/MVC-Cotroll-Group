@@ -7,27 +7,18 @@ namespace MVC_Cotroll_Group.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly CategoryRepository _categoryRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(CategoryRepository categoryController)
         {
-            _logger = logger;
+            _categoryRepository = categoryController;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var categories = await _categoryRepository.GetAllAsync();
+            ViewData["Categories"] = categories;
             return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
