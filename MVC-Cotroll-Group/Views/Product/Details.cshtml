@@ -1,5 +1,36 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model MVC_Cotroll_Group.Models.Product
 @{
+    ViewData["Title"] = "Product Details";
 }
+
+<div class="max-w-xl mx-auto mt-10">
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">Product Details</h1>
+
+    <div class="bg-white shadow-lg rounded-lg p-6 space-y-4">
+        <div>
+            <h2 class="text-xl font-semibold text-gray-800">@Model.Name</h2>
+            <p class="text-gray-500 text-sm">ID: @Model.Id</p>
+        </div>
+
+        <div class="border-t pt-4">
+            <p><span class="font-medium text-gray-700">Description:</span> @Model.Description</p>
+            <p><span class="font-medium text-gray-700">Price:</span> $@Model.Price</p>
+            <p><span class="font-medium text-gray-700">Rating:</span> ⭐ @Model.Rating / 5</p>
+            <p><span class="font-medium text-gray-700">Category:</span> @Model.Category?.Name</p>
+        </div>
+
+        <div class="flex justify-end space-x-3 mt-6">
+            <a href="@Url.Action("Edit", "Product", new { id = Model.Id })" class="px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition">
+                Edit
+            </a>
+
+            <a href="@Url.Action("Delete", "Product", new { id = Model.Id })" class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition">
+                Delete
+            </a>
+
+            <a href="@Url.Action("Index", "Product", new { categoryId = Model.CategoryId })" class="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 transition">
+                Back
+            </a>
+        </div>
+    </div>
+</div>
