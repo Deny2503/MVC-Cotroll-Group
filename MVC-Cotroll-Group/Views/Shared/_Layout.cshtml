@@ -4,10 +4,37 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MVC_Cotroll_Group</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MVC_Cotroll_Group.styles.css" asp-append-version="true" />
+
+
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
 </head>
 <body>
     
+    <header class="bg-white border-b border-gray-200">
+        <nav class="bg-white shadow-md">
+            <div class="flex items-center">
+                <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                    <p class="px-4 py-3 text-gray-700 hover:bg-gray-100 border-r border-gray-200 m-0">
+                        Home
+                    </p>
+                </a>
+                <a asp-controller="Product" asp-action="Index" class="text-decoration-none">
+                    <p class="px-4 py-3 text-gray-700 hover:bg-gray-100 border-r border-gray-200 m-0">
+                        Products
+                    </p>
+                </a>
+                <a asp-controller="Category" asp-action="Index" class="text-decoration-none">
+                    <p class="px-4 py-3 text-gray-700 hover:bg-gray-100 border-r border-gray-200 m-0">
+                        Categories
+                    </p>
+                </a>
+            </div>
+        </nav>
+    </header>
 
     <div class="container">
         <main role="main" class="pb-3">
