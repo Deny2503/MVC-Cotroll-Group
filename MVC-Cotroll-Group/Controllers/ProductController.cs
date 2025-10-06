@@ -16,9 +16,31 @@ namespace MVC_Cotroll_Group.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? category, string? sortOrder)
         {
             var products = await _productRepository.GetAllWithCategoryAsync();
+            if (!string.IsNullOrEmpty(category))
+            {
+                Category? category_object = await _categoryRepository.GetByNameAsync(category);
+                if (category_object == null) return NotFound();
+
+                products = products
+                    .Where(p => p.CategoryId == category_object.Id);
+                ViewData["SeacrchCategory"] = category_object.Name;
+                
+            }
+
+            products = sortOrder switch
+            {
+                "price_asc" => products.OrderBy(p => p.Price),
+                "price_desc" => products.OrderByDescending(p => p.Price),
+                "rating_asc" => products.OrderBy(p => p.Rating),
+                "rating_desc" => products.OrderByDescending(p => p.Rating),
+                "name_asc" => products.OrderBy(p => p.Name),
+                "name_desc" => products.OrderByDescending(p => p.Name),
+                _ => products.OrderBy(p => p.Id)
+            };
+
             return View(products);
         }
 
@@ -43,6 +65,7 @@ namespace MVC_Cotroll_Group.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
+            ModelState.Remove("Category");
             if (!ModelState.IsValid)
             {
                 var categories = await _categoryRepository.GetAllAsync();
@@ -72,6 +95,7 @@ namespace MVC_Cotroll_Group.Controllers
         {
             if (id != product.Id) return BadRequest();
 
+            ModelState.Remove("Category");
             if (!ModelState.IsValid)
             {
                 var categories = await _categoryRepository.GetAllAsync();

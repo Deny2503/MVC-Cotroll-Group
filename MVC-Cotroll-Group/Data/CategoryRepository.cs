@@ -27,5 +27,11 @@ namespace MVC_Cotroll_Group.Repositories
                 .Include(c => c.Products)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
+
+        public async Task<Category?> GetByNameAsync(string name)
+        {
+            return await _context.Categories
+                .FirstOrDefaultAsync(c => EF.Functions.Like(c.Name, $"%{name}%"));
+        }
     }
 }
